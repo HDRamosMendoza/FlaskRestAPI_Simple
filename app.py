@@ -76,5 +76,16 @@ def editProduct(product_name):
         })
     return jsonify({"message": "Product not found"})
 
+@app.route('/products/<string:product_name>', methods=['DELETE'])
+def deleteProduct(product_name):
+    productsFound = [product for product in products if product['name'] == product_name]
+    if len(productsFound) > 0:
+        products.remove(productsFound[0])
+        return jsonify({
+            "message": "Product Deleted",
+            "products": products
+        })
+    return jsonify({"message": "Product Not found"})
+
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
