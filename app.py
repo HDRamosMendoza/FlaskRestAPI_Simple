@@ -1,17 +1,14 @@
-from flask import Flask, jsonify
-
+from flask import Flask, jsonify, request
 ''' 
-    jsonify. Nos permite convertir
-    un objeto a un json
+    - jsonify. Nos permite convertir un objeto a un json.
+    - request. Proporciona los datos que se enviar por http.
 '''
-
 '''Aplicativo de servidorr'''
 app = Flask(__name__)
-
 '''
     Inicializamos el servidor. Si el 
-    archivo se esta ejecutando como archivo principal'''
-
+    archivo se esta ejecutando como archivo principal
+'''
 from products import products
 
 ''' Testeo. Ruta de prueba - string '''
@@ -45,10 +42,26 @@ def getProductName(product_name):
         return jsonify({"Product": productsFound[0]})
     return jsonify({"message": "Product not found"})
 
-'''
-@app.route('/product', methods=['POST'])
+@app.route('/products', methods=['POST'])
 def addProduct():
-'''
-    
+    '''
+    JSON DE DEMO DEL LADO DEL CLIENTE(INSOMNIA)
+    {
+        "name": "mouse gaming",
+        "price": 45.99,
+        "quantity": 2
+    }
+    '''
+    new_product = {
+        "name": request.json['name'],
+        "price": request.json['price'],
+        "quantity": request.json['quantity']
+    }
+    products.append(new_product)
+    return jsonify({
+        "message": "Product Added Succesfully",
+        "products": products
+        })
+            
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
